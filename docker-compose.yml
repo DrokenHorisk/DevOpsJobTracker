@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  devopsjobtracker:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./instance:/app/instance
+      - ./.env:/app/.env
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_ENV=development

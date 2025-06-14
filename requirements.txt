@@ -1,0 +1,11 @@
+Flask
+flask_sqlalchemy
+flask_migrate
+requests
+beautifulsoup4
+APScheduler
+python-dotenv
+discord-webhook
+APScheduler
+selenium
+webdriver-manager

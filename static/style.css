@@ -1,0 +1,10 @@
+th { background: #eee; }
+a { color: #007bff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+body {
+    background: #f4f6fa;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}

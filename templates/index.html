@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Offres DevOps en Suisse</h2>
+
+<table class="table table-hover align-middle shadow-sm bg-white rounded">
+    <thead class="table-primary">
+        <tr>
+            <th>Titre</th>
+            <th>Entreprise</th>
+            <th>Date</th>
+            <th>Postulé</th>
+            <th>Relance</th>
+            <th>Notes</th>
+            <th>Lien</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for offer in offers %}
+        <tr>
+            <td>{{ offer.titre }}</td>
+            <td>{{ offer.entreprise }}</td>
+            <td>{{ offer.date_publication.strftime('%d/%m/%Y') }}</td>
+            <td>
+                {% if offer.postule %}
+                    <span class="badge bg-success">Oui</span>
+                {% else %}
+                    <form method="post" action="{{ url_for('postuler', offer_id=offer.id) }}">
+                        <button class="btn btn-outline-success btn-sm">J'ai postulé</button>
+                    </form>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if not offer.postule %}
+                    <span class="badge bg-light text-muted">-</span>
+                {% elif offer.relance_effectuee %}
+                    <span class="badge bg-success">Fait</span>
+                {% elif offer.date_relance %}
+                    {% if offer.date_relance <= current_date %}
+                        <form method="post" action="{{ url_for('relance', offer_id=offer.id) }}" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm ms-1">À relancer !</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{{ url_for('relance', offer_id=offer.id) }}" class="d-inline">
+                            <button type="submit" class="btn btn-warning btn-sm ms-1">
+                                Relancer le {{ offer.date_relance.strftime('%d/%m/%Y') }}
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <span class="badge bg-light text-muted">-</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {{ offer.notes or '' }}
+                <!-- Bouton pour ouvrir la modale -->
+                <button class="btn btn-outline-secondary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#noteModal{{ offer.id }}">
+                    📝
+                </button>
+
+                <!-- Modale Bootstrap pour la note -->
+                <div class="modal fade" id="noteModal{{ offer.id }}" tabindex="-1" aria-labelledby="noteModalLabel{{ offer.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <form method="post" action="{{ url_for('ajouter_note', offer_id=offer.id) }}">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="noteModalLabel{{ offer.id }}">Ajouter/Modifier une note</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                        </div>
+                        <div class="modal-body">
+                        <textarea class="form-control" name="note" rows="3">{{ offer.notes or '' }}</textarea>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </td>
+
+            <td>
+                <a href="{{ offer.lien }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                    Voir
+                </a>
+            </td>
+
+            <td>
+                <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ offer.id }}">
+                    Modifier
+                </button>
+
+                <!-- Modale de modification -->
+                <div class="modal fade" id="editModal{{ offer.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ offer.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <form method="post" action="{{ url_for('modifier_offre', offer_id=offer.id) }}">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel{{ offer.id }}">Modifier l’offre</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="date_relance_{{ offer.id }}" class="form-label">Date de relance</label>
+                                <input type="date" class="form-control" id="date_relance_{{ offer.id }}" name="date_relance"
+                                    value="{{ offer.date_relance }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="notes_{{ offer.id }}" class="form-label">Note</label>
+                                <textarea class="form-control" id="notes_{{ offer.id }}" name="notes" rows="2">{{ offer.notes or '' }}</textarea>
+                            </div>
+                            <!-- Tu peux ajouter plus de champs ici -->
+                        </div>
+                        <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </td>
+            <td>
+                <a href="{{ url_for('details', offer_id=offer.id) }}" class="btn btn-outline-info btn-sm ms-1">Détails</a>
+            </td>
+
+        </tr>
+        
+    {% else %}
+        <tr>
+            <td colspan="7" class="text-center text-muted">Aucune offre pour le moment.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

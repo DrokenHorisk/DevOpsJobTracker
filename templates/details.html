@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Détails de l’offre</h2>
+  <ul>
+    <li><b>Titre :</b> {{ offer.titre }}</li>
+    <li><b>Entreprise :</b> {{ offer.entreprise }}</li>
+    <li><b>Salaire :</b> {{ offer.salaire or 'Non précisé' }}</li>
+    <li><b>Localisation :</b> {{ offer.localisation or 'Non précisée' }}</li>
+    {% if offer.keywords %}
+      <li>
+        <b>Mots-clés :</b>
+        {% for keyword in offer.keywords.split(',') %}
+          <span class="badge bg-info text-dark">{{ keyword }}</span>
+        {% endfor %}
+      </li>
+    {% endif %}
+  </ul>
+  <a href="{{ offer.lien }}" target="_blank" class="btn btn-primary">Lien vers l’offre</a>
+{% endblock %}

@@ -1,0 +1,5 @@
+__pycache__
+*.pyc
+instance/devopsjobs.db
+.env
+.git
