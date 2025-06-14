@@ -54,11 +54,3 @@ Modifier
 - **`run.py`** : Démarre l’appli Flask
 
 ---
-
-## 🎁 Tu veux un “starter pack” de tous ces fichiers pour démarrer ?  
-Ex : code minimal pour chaque fichier, base HTML, et premier scraper Indeed ?  
-Je peux aussi te donner le code du modèle SQLAlchemy et la structure Flask d’accueil !
-
-**Dis-moi si tu veux tout en un seul bloc ici, ou fichier par fichier.**  
-Si tu veux des exemples de scraping (Indeed, JobUp), indique les sites qui t'intéressent en priorité.  
-Je peux aussi générer un dépôt GitHub prêt à l’emploi si besoin !
